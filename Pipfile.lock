@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "16fc0a0f7c3ec947780ecb2442cbbaca212e42e148d17854375ae820a2749123"
+            "sha256": "68e17b4f1a6f8d01fa8542cd6ed18ced0ee7e4d0cc8755b9f59251e351df27b4"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.6"
+            "python_version": "3.10"
         },
         "sources": [
             {
@@ -16,13 +16,32 @@
         ]
     },
     "default": {
+        "appdirs": {
+            "hashes": [
+                "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41",
+                "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"
+            ],
+            "version": "==1.4.4"
+        },
         "click": {
             "hashes": [
-                "sha256:2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13",
-                "sha256:5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7"
+                "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28",
+                "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de"
             ],
             "index": "pypi",
-            "version": "==7.0"
+            "markers": "python_version >= '3.7'",
+            "version": "==8.1.7"
+        },
+        "daemonize": {
+            "hashes": [
+                "sha256:9b6b91311a9d934ff3f5f766666635ca280d3de8e7137e4cd7d3f052543b989f",
+                "sha256:dd026e4ff8d22cb016ed2130bc738b7d4b1da597ef93c074d2adb9e4dea08bc3"
+            ],
+            "version": "==2.5.0"
+        },
+        "inkscape-figures": {
+            "editable": true,
+            "file": "."
         },
         "inotify": {
             "hashes": [
@@ -42,10 +61,10 @@
         },
         "pyperclip": {
             "hashes": [
-                "sha256:979325468ccf682104d5dcaf753f869868100631301d3e72f47babdea5700d1c"
+                "sha256:105254a8b04934f0bc84e9c24eb360a591aaf6535c9def5f29d92af107a9bf57"
             ],
             "index": "pypi",
-            "version": "==1.7.0"
+            "version": "==1.8.2"
         }
     },
     "develop": {}

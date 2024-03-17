@@ -32,7 +32,11 @@ def indent(text, indentation=0):
 def beautify(name):
     return name.replace('_', ' ').replace('-', ' ').title()
 
-def latex_template(name, title):
+def get_template(name, title, lang='latex'):
+    if lang == 'markdown':
+        return '\n'.join((
+            f"![{title}](figures/{name}.svg)",
+            f"Figure: {title}"))
     return '\n'.join((
         r"\begin{figure}[ht]",
         r"    \centering",
@@ -71,7 +75,7 @@ if not template.is_file():
 
 if config.exists():
     config_module = import_file('config', config)
-    latex_template = config_module.latex_template
+    get_template = config_module.get_template
 
 
 def add_root(path):
@@ -95,7 +99,7 @@ def cli():
 
 @cli.command()
 @click.option('--daemon/--no-daemon', default=True)
-def watch(daemon):
+def watch(daemon, lang):
     """
     Watches for figures.
     """
@@ -112,10 +116,10 @@ def watch(daemon):
         log.info("Watching figures.")
     else:
         log.info("Watching figures.")
-        watcher_cmd()
+        watcher_cmd(lang=lang)
 
 
-def maybe_recompile_figure(filepath):
+def maybe_recompile_figure(filepath, lang):
     filepath = Path(filepath)
     # A file has changed
     if filepath.suffix != '.svg':
@@ -171,13 +175,13 @@ def maybe_recompile_figure(filepath):
     else:
         log.debug('Command succeeded')
 
-    # Copy the LaTeX code to include the file to the clipboard
-    template = latex_template(name, beautify(name))
+    # Copy the LaTeX/Markdown code to include the file to the clipboard
+    template = get_template(name, beautify(name), lang='latex')
     pyperclip.copy(template)
-    log.debug('Copying LaTeX template:')
+    log.debug(f'Copying {lang} template:')
     log.debug(textwrap.indent(template, '    '))
 
-def watch_daemon_inotify():
+def watch_daemon_inotify(lang):
     import inotify.adapters
     from inotify.constants import IN_CLOSE_WRITE
 
@@ -215,10 +219,10 @@ def watch_daemon_inotify():
 
             # A file has changed
             path = Path(path) / filename
-            maybe_recompile_figure(path)
+            maybe_recompile_figure(path, lang)
 
 
-def watch_daemon_fswatch():
+def watch_daemon_fswatch(lang):
     while True:
         roots = get_roots()
         log.info('Watching directories: ' + ', '.join(roots))
@@ -241,7 +245,7 @@ def watch_daemon_fswatch():
                 p.terminate()
                 log.debug('Removed main watch %s')
                 break
-            maybe_recompile_figure(filepath)
+            maybe_recompile_figure(filepath, lang)
 
 
 
@@ -252,7 +256,8 @@ def watch_daemon_fswatch():
     default=os.getcwd(),
     type=click.Path(exists=False, file_okay=False, dir_okay=True)
 )
-def create(title, root):
+@click.option('--lang', type=str, default='latex')
+def create(title, root, lang):
     """
     Creates a figure.
 
@@ -280,7 +285,7 @@ def create(title, root):
     # Print the code for including the figure to stdout.
     # Copy the indentation of the input.
     leading_spaces = len(title) - len(title.lstrip())
-    print(indent(latex_template(figure_path.stem, title), indentation=leading_spaces))
+    print(indent(get_template(figure_path.stem, title, lang), indentation=leading_spaces))
 
 @cli.command()
 @click.argument(
@@ -288,7 +293,8 @@ def create(title, root):
     default=os.getcwd(),
     type=click.Path(exists=True, file_okay=False, dir_okay=True)
 )
-def edit(root):
+@click.option('--lang', type=str, default='latex')
+def edit(root, lang):
     """
     Edits a figure.
 
@@ -310,7 +316,7 @@ def edit(root):
         inkscape(path)
 
         # Copy the LaTeX code to include the file to the clipboard
-        template = latex_template(path.stem, beautify(path.stem))
+        template = get_template(path.stem, beautify(path.stem), lang=lang)
         pyperclip.copy(template)
         log.debug('Copying LaTeX template:')
         log.debug(textwrap.indent(template, '    '))
