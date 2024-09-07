@@ -1,5 +1,11 @@
 # Inkscape figure manager.
 
+## My modified version
+
+Built with pyinstaller (?)
+
+---
+
 A script I use to manage figures for my LaTeX documents.
 More information in this [blog post](https://castel.dev/post/lecture-notes-2/).
 
@@ -98,3 +104,4 @@ def latex_template(name, title):
                       rf"    \label{{fig:{name}}}",
                       r"\end{figure}"))
 ```
+

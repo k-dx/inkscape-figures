@@ -8,6 +8,7 @@ click = "*"
 inotify = "*"
 pyperclip = "*"
 inkscape-figures = {file = ".", editable = true}
+pyinstaller = "*"
 
 [dev-packages]
 
